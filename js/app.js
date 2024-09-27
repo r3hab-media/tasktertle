@@ -467,10 +467,10 @@ window.addEventListener("beforeinstallprompt", (e) => {
 	e.preventDefault();
 	deferredPrompt = e;
 	const installButton = document.getElementById("installButton");
-	installButton.style.display = "block";
+	installButton.classList.remove("d-none");
 
 	installButton.addEventListener("click", () => {
-		installButton.style.display = "none";
+		installButton.classList.add("d-none");
 		deferredPrompt.prompt();
 		deferredPrompt.userChoice.then((choiceResult) => {
 			if (choiceResult.outcome === "accepted") {
