@@ -318,7 +318,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			const dayEnd12Hour = convertTo12HourFormat(dayEnd);
 			updatedTasks.innerHTML += `<p><strong>Active today from ${dayStart12Hour} to ${dayEnd12Hour}</strong></p>`;
 		} else {
-			updatedTasks.innerHTML += `<p><strong>No hours set for today.</strong></p>`;
+			updatedTasks.innerHTML += `<p><strong>No times set for today.</strong></p>`;
 		}
 
 		// Loop through tasks and display them
@@ -347,8 +347,8 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 
 			let taskHTML = `<h5>Task ${index + 1}</h5><p>${taskMessage}</p>
-      <button class="btn btn-sm btn-primary edit-task" data-index="${index}">Edit</button>
-      <button class="btn btn-sm btn-danger delete-task" data-index="${index}">Delete</button>`;
+      <button class="btn btn-sm btn-primary edit-task" data-index="${index}"><i class="fa-solid fa-pen-to-square"></i></button>
+      <button class="btn btn-sm btn-danger delete-task" data-index="${index}"><i class="fa-solid fa-trash-can"></i></button>`;
 
 			taskElement.innerHTML = taskHTML;
 			updatedTasks.appendChild(taskElement);
