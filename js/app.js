@@ -45,15 +45,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		// Add active hours before the task list, if available
 		taskText += `Today's Date: ${todayFormatted}\n`;
-		taskText += `Week#: ${currentWeekNumber}\n\n`;
+		taskText += `Week#: ${currentWeekNumber}\n`;
 
 		const dayStart = localStorage.getItem("dayStart");
 		const dayEnd = localStorage.getItem("dayEnd");
 
 		if (dayStart && dayEnd) {
-			taskText += `Active today from ${convertTo12HourFormat(dayStart)} to ${convertTo12HourFormat(dayEnd)}\n\n`;
+			taskText += `Active today from ${convertTo12HourFormat(dayStart)} to ${convertTo12HourFormat(dayEnd)}\n`;
 		} else {
-			taskText += "No hours set for today.\n\n";
+			taskText += "No times set for today.\n";
 		}
 
 		tasks.forEach((task, index) => {
