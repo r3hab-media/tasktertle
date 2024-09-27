@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="mask-icon" href="icons/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffc40d">
+  <meta name="theme-color" content="#000000">
+  <title>Task Tertle</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js" defer></script>
+  <script src="js/app.js" defer></script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <main>
+    <div class="container p-3">
+      <div class="row">
+        <div class="col-sm-12 d-flex justify-content-between">
+          <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+            data-bs-target="#dayStartsModal">
+            Start the Day!
+          </button>
+          <button id="installButton" type="button" class="d-none btn btn-sm btn-outline-primary">Install App</button>
+        </div>
+        <div class="col-sm-12 mt-3">
+          <header>
+            <img src="icons/android-chrome-512x512.png" class="logo" alt="">
+            <h3>Task Tertle</h3>
+          </header>
+          <span class="text-danger">*Required Field</span>
+          <div class="row mt-3">
+            <div class="col-12">
+              <h3>Work Day Hours</h3>
+              <div id="workDayHours" class="d-flex flex-column"></div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-12">
+              <h3>Task Times</h3>
+              <div class="row">
+                <div class="col-sm-12 col-md-6 mt-3">
+                  <div class="input-group-text">
+                    <i class="fa-regular fa-calendar-xmark me-2"></i> Start Time
+                  </div>
+                  <input class="form-control" type="time" id="startTime">
+                </div>
+                <div class="col-sm-12 col-md-6 mt-3">
+                  <div class="input-group-text">
+                    <i class="fa-regular fa-calendar-check me-2"></i> End Time
+                  </div>
+                  <input class="form-control" type="time" id="endTime">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-sm-12">
+              <div class="input-group mt-3">
+                <span class="input-group-text">
+                  <i class="fa-regular fa-rectangle-list"></i>&nbsp;<span class="text-danger">*</span></span>
+                <textarea class="form-control" id="taskDetails" aria-label="With textarea" placeholder="Task Details"
+                  required></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-sm-12 col-lg-3">
+              <div class="input-group">
+                <label class="input-group-text" for="deptListing">Dept?</label>
+                <select class="form-select" id="deptListing">
+                  <option selected disabled>Choose...</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-12 col-lg-6 mt-3 mt-lg-0">
+              <div class="input-group">
+                <div class="input-group-text">
+                  <input class="form-check-input mt-0" type="checkbox" value="" id="yearlyGoal">
+                </div>
+                <span class="input-group-text" for="yearlyGoal">Part of a Yearly Goal?</span>
+                <input type="text" class="form-control" placeholder="Identify which goal" id="yearlyGoalInput"
+                  aria-label="Identify yearly goal" style="display:none;">
+              </div>
+            </div>
+            <div class="col-sm-12 col-lg-3 mt-3 mt-lg-0">
+              <div class="input-group">
+                <div class="input-group-text">
+                  <input class="form-check-input mt-0" type="checkbox" value="" id="cherwellTicket"
+                    aria-label="Checkbox for following text input">
+                </div>
+                <span class="input-group-text" for="cherwellTicket">Cherwell Ticket?</span>
+                <input type="text" class="form-control" placeholder="Ticket #" id="ticketNumber"
+                  aria-label="Ticket Number" aria-describedby="basic-addon1" style="display:none;">
+              </div>
+            </div>
+          </div>
+          <div class="btn btn-md btn-success mt-3" id="submitTask"><i class="fa-solid fa-check-double"></i> Task</div>
+          <div class="btn btn-md btn-danger mt-3" id="clearTasks"><i class="fa-solid fa-trash-can"></i> All Tasks</div>
+          <div class="btn btn-md btn-secondary mt-3" id="copyTasks"><i class="fa-regular fa-copy"></i> All Tasks</div>
+        </div>
+        <p id="detailsError" class="text-danger"></p>
+      </div>
+      <div class="row mt-5">
+        <div class="col-sm-12">
+          <!-- Bootstrap alert container -->
+          <div id="alertContainer" class="w-25"></div>
+          <h3>Completed or Working Tasks</h3>
+          <div id="updatedTasks"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer class="fw-bold">
+    Made with <i class="fa fa-heart text-danger mx-2"></i> &amp; <i class="fa-solid fa-mug-saucer mx-2 "></i> by <a class="mx-1" href="https://jarednewnam.com">Jared</a>
+  </footer>
+
+  <!-- Day Starts Modal -->
+  <div class="modal fade" id="dayStartsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Start the Day<br><small>Enter your start and end time
+              for
+              today.</small></h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-12 col-md-6 mt-3 mt-lg-0">
+              <div class="input-group-text" id="dayStart">
+                <i class="fa-regular fa-calendar-check me-2"></i> Day Start
+              </div>
+              <input class="form-control" type="time" id="dayStartInput">
+            </div>
+            <div class="col-sm-12 col-md-6 mt-3 mt-lg-0">
+              <div class="input-group-text" id="dayEnd">
+                <i class="fa-regular fa-calendar-check me-2"></i> Day End
+              </div>
+              <input class="form-control" type="time" id="dayEndInput">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

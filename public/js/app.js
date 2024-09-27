@@ -190,7 +190,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <p style="margin: 0;">
           <strong>Day Start: </strong> ${dayStartFormatted} | <strong>Day End: </strong> ${dayEndFormatted}
         </p>
-        <button class="btn btn-sm btn-outline-danger ms-2">Delete Hours</button>
+        <button class="btn btn-sm btn-outline-danger ms-2"><i class="fa-solid fa-trash-can"></i></button>
       </div>
       <p>Your total tasks accounted for <strong>${percentageOfWorkDay}%</strong> of your total work day hours.</p>
     `;

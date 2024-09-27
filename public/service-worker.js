@@ -1,4 +1,4 @@
-const CACHE_NAME = "procrastinot-cache-v1";
+const CACHE_NAME = "tasktertle-cache-v2";
 const urlsToCache = ["/", "/index.html", "/manifest.json", "/css/styles.css", "/js/app.js", "/icons/icon-192x192.png", "/icons/icon-512x512.png"];
 
 // Install the service worker
