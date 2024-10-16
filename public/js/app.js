@@ -1,14 +1,42 @@
 document.addEventListener("DOMContentLoaded", function () {
-	const selectMenu = document.getElementById("deptListing");
-
 	const departments = [
-		{ id: 1, name: "Airport" },
-		{ id: 2, name: "Fire Department" },
-		{ id: 3, name: "Police Department" },
-		{ id: 4, name: "Public Works" },
+		{ id: 1, name: "Adult Sports" },
+		{ id: 2, name: "Aquatics & Fitness" },
+		{ id: 3, name: "Airport" },
+		{ id: 4, name: "Board & Commissions" },
+		{ id: 5, name: "Capital Improvement" },
+		{ id: 6, name: "City Council" },
+		{ id: 7, name: "Codes & Ordinances" },
+		{ id: 8, name: "Court" },
+		{ id: 9, name: "Economic Development" },
+		{ id: 10, name: "Elections & Voting" },
+		{ id: 11, name: "Financial Services" },
+		{ id: 12, name: "Fire Department" },
+		{ id: 13, name: "Housing Services" },
+		{ id: 15, name: "Parks" },
+		{ id: 16, name: "Planning & Development" },
+		{ id: 17, name: "Police Department" },
+		{ id: 18, name: "Public Works" },
+		{ id: 19, name: "Scottsdale Video Network" },
+		{ id: 20, name: "Seniors" },
+		{ id: 21, name: "Solid Waste" },
+		{ id: 22, name: "Sustainability" },
+		{ id: 23, name: "Tourism & Events" },
+		{ id: 24, name: "Transit System" },
+		{ id: 25, name: "Utility Billing" },
+		{ id: 26, name: "Veterans" },
+		{ id: 27, name: "Volunteer Opportunities" },
+		{ id: 28, name: "Youth & Teen Programs" },
+		{ id: 14, name: "Human Resources" }
 	];
 
+	// Sort departments alphabetically by name
+	departments.sort((a, b) => a.name.localeCompare(b.name));
+
+	const selectMenu = document.getElementById("deptListing");
 	selectMenu.innerHTML = "<option selected disabled>Choose...</option>";
+
+	// Populate the dropdown with the sorted departments
 	departments.forEach((department) => {
 		const option = document.createElement("option");
 		option.value = department.name;
@@ -44,29 +72,37 @@ document.addEventListener("DOMContentLoaded", function () {
 		const currentWeekNumber = getWeekNumber(today);
 
 		// Add active hours before the task list, if available
-		taskText += `Today's Date: ${todayFormatted}\n`;
 		taskText += `Week#: ${currentWeekNumber}\n`;
+		taskText += `Today's Date: ${todayFormatted}\n`;
 
 		const dayStart = localStorage.getItem("dayStart");
 		const dayEnd = localStorage.getItem("dayEnd");
 
 		if (dayStart && dayEnd) {
+			const dayStartMinutes = convertTimeToMinutes(dayStart);
+			const dayEndMinutes = convertTimeToMinutes(dayEnd);
+			const totalWorkDayMinutes = dayEndMinutes - dayStartMinutes;
+
+			// Calculate total task minutes
+			const totalTaskMinutes = calculateTotalTaskMinutes();
+			const percentageOfWorkDay = ((totalTaskMinutes / totalWorkDayMinutes) * 100).toFixed(1);
+
+			// Add the percentage to the copied text
 			taskText += `Active today from ${convertTo12HourFormat(dayStart)} to ${convertTo12HourFormat(dayEnd)}\n`;
+			taskText += `Your total tasks accounted for ${percentageOfWorkDay}% of your total work day hours.\n`;
 		} else {
 			taskText += "No times set for today.\n";
 		}
 
 		tasks.forEach((task, index) => {
-			taskText += `Task ${index + 1}\n`;
-
 			if (task.startTime && task.endTime) {
-				taskText += `Task Time: ${convertTo12HourFormat(task.startTime)} to ${convertTo12HourFormat(task.endTime)} `;
+				taskText += `- From ${convertTo12HourFormat(task.startTime)} to ${convertTo12HourFormat(task.endTime)} `;
 			}
 
 			if (task.deptListing && task.deptListing !== "Choose...") {
 				taskText += `Assisted ${task.deptListing} in the following: ${task.taskDetails} `;
 			} else {
-				taskText += `${task.taskDetails}`;
+				taskText += `${task.taskDetails} `;
 			}
 
 			if (task.cherwellTicket) {
@@ -84,7 +120,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		navigator.clipboard
 			.writeText(taskText)
 			.then(() => {
-				// Display the Bootstrap alert
 				showBootstrapAlert("Tasks copied to clipboard!", "success");
 			})
 			.catch((err) => {
@@ -112,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			alertDiv.classList.remove("show");
 			alertDiv.classList.add("fade");
 			alertDiv.remove();
-		}, 3000);
+		}, 5000);
 	}
 
 	// Function to handle checkbox and input toggle
@@ -335,7 +370,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			if (task.deptListing && task.deptListing !== "Choose...") {
 				taskMessage += `Assisted ${task.deptListing} in the following: ${task.taskDetails} `;
 			} else {
-				taskMessage += `${task.taskDetails}. `;
+				taskMessage += `${task.taskDetails} `;
 			}
 
 			if (task.cherwellTicket) {
@@ -388,7 +423,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		document.getElementById("cherwellTicket").dispatchEvent(new Event("change"));
 
 		const submitButton = document.getElementById("submitTask");
-		submitButton.textContent = "Update Task";
+		submitButton.innerHTML = `<i class="fa-solid fa-upload"></i> Task`;
 
 		submitButton.removeEventListener("click", submitTask); // Remove existing submit listener
 		submitButton.addEventListener("click", function updateTask() {
@@ -402,7 +437,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			tasks[index] = task;
 			localStorage.setItem("tasks", JSON.stringify(tasks));
 
-			submitButton.textContent = "Submit Task";
+			submitButton.innerHTML = '<i class="fa-solid fa-check-double"></i> Task';
 			submitButton.removeEventListener("click", updateTask);
 			submitButton.addEventListener("click", submitTask);
 
@@ -427,8 +462,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// Function to clear all tasks
 	document.getElementById("clearTasks").addEventListener("click", function () {
-		localStorage.removeItem("tasks"); // Clear tasks from localStorage
-		displayTasks(); // Refresh the task list
+		const userInput = prompt("Please type DELETE to confirm.");
+
+		// Check if user input matches exactly "DELETE"
+		if (userInput === "DELETE") {
+			localStorage.removeItem("tasks"); // Clear tasks from localStorage
+			displayTasks(); // Refresh the task list
+		} else {
+			// Display error message
+			const errorDelete = document.getElementById("errorDelete"); // Ensure this element exists
+			errorDelete.innerHTML = `
+            <div class="alert alert-danger alert-dismissible w-fit mt-3" role="alert">
+                Apologies. We can't delete until you get it right.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+
+			// Automatically hide the alert after 5 seconds
+			setTimeout(() => {
+				errorDelete.innerHTML = ""; // Clear the alert
+			}, 5000);
+		}
 	});
 
 	// Function to reset form fields after submission or edit
